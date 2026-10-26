@@ -1,0 +1,44 @@
+# Dependencies
+node_modules/
+
+# Next.js / build output
+.next/
+out/
+build/
+*.tsbuildinfo
+next-env.d.ts
+
+# Testing
+coverage/
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+*.pem
+
+# Internal / private project docs (not for public release)
+*.private.md
+*.private.txt
+notes/
+private/
+
+# Local AI assistant & editor settings
+.claude/
+CLAUDE.local.md
+.vscode/
+.idea/
+*.swp
+
+# Deploy tooling
+.vercel/
+
+# OS / logs
+.DS_Store
+Thumbs.db
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Cloudflare Wrangler local state
+.wrangler/

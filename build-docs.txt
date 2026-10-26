@@ -1,0 +1,261 @@
+Build a Professional Browser-Based Screenshot Annotation Studio
+
+Act as a senior frontend engineer, graphics application engineer, accessibility specialist, and product UI/UX designer.
+
+Build a complete, polished screenshot annotation application that runs primarily in the browser. Do not deliver a static mockup or a collection of nonfunctional buttons. Inspect the repository, plan the implementation, build the working product, and run the available tests and production checks.
+
+1. Product Objective
+
+Create a fast screenshot editor for developers, QA engineers, technical writers, support teams, teachers, and designers.
+
+Users should be able to paste, upload, or drag in an image, annotate it with professional visual elements, hide sensitive information, and export the result.
+
+Core principles:
+
+- No account required.
+- No mandatory upload to a server.
+- No paid AI APIs.
+- Privacy-first local processing.
+- Fast editing with familiar keyboard shortcuts.
+- Professional export quality.
+- Responsive, accessible UI.
+
+2. Technology Stack
+
+Use the latest stable compatible versions:
+
+- Next.js App Router.
+- React and TypeScript in strict mode.
+- Tailwind CSS.
+- shadcn/ui or equivalent accessible UI primitives.
+- Lucide icons.
+- Fabric.js or Konva for canvas editing; choose one and document the rationale.
+- Zustand or a small dedicated state store for editor state.
+- Vitest for unit tests.
+- Playwright for end-to-end tests.
+
+Keep the actual image and editing operations client-side. Do not upload screenshots to an external service.
+
+3. Main Application Layout
+
+Design a polished desktop-first editor that remains usable on tablets and mobile devices.
+
+Include:
+
+- Top toolbar with application logo, file actions, undo/redo, zoom controls, and export.
+- Left toolbar with annotation tools.
+- Central canvas with a checkerboard or neutral workspace background.
+- Contextual properties panel for the selected object.
+- Optional layers or object list panel.
+- Status bar with image dimensions, zoom level, and selection information.
+
+Use restrained colors, clear spacing, subtle borders, useful tooltips, keyboard focus indicators, and accessible contrast.
+
+Create:
+
+1. A simple landing page with a clear call to action.
+2. The screenshot editor.
+3. An empty state explaining paste, upload, and drag-and-drop.
+4. A useful unsupported-file/error state.
+5. A confirmation or warning when clearing an unsaved project.
+
+Do not overbuild a marketing site at the expense of the editor.
+
+4. Image Import
+
+Support:
+
+- Paste images from the clipboard using Ctrl/Cmd+V.
+- Drag-and-drop image files.
+- File picker import.
+- PNG, JPEG, and WebP.
+- Transparent images.
+- Large image dimensions within configurable safety limits.
+
+Requirements:
+
+- Validate file type and size.
+- Show progress or loading feedback for large images.
+- Preserve the original image dimensions and aspect ratio.
+- Display a useful error when an image cannot be decoded.
+- Avoid blocking the UI during expensive image processing.
+- Keep the original image separate from annotation objects.
+
+The app should work with no backend connection.
+
+5. Annotation Tools
+
+Implement real interactive tools with selection, pointer handling, styling, and keyboard support.
+
+Shapes
+
+- Rectangle.
+- Ellipse/circle.
+- Straight line.
+- Arrow.
+- Freehand pen.
+- Highlighter.
+- Text box.
+- Numbered step marker.
+
+Object interactions
+
+- Select, move, resize, and delete objects.
+- Configure stroke color and thickness.
+- Configure fill color and opacity.
+- Change text size, weight, and alignment.
+- Change arrowhead style.
+- Duplicate an object.
+- Bring an object forward or send it backward.
+- Lock or unlock an object when supported by the selected canvas library.
+
+Add a contextual toolbar that changes based on the active tool or selected object.
+
+New annotations should be visually clear and easy to distinguish from the underlying screenshot.
+
+6. Privacy and Redaction
+
+Implement three distinct tools:
+
+- Blur selected regions.
+- Pixelate selected regions.
+- Opaque redaction rectangles.
+
+Important:
+
+- Opaque redaction must be flattened into the final image so covered content is not recoverable from the exported file.
+- Never treat a translucent highlight as secure redaction.
+- Make the distinction between decorative blur and permanent redaction clear.
+- Ensure exported output does not include hidden annotation objects or the original image as an additional recoverable layer.
+- Test redaction output independently from the editing view.
+
+Do not claim that blur is equivalent to secure redaction.
+
+7. Editor State and History
+
+Implement:
+
+- Undo and redo.
+- Keyboard shortcuts.
+- Object selection and deletion.
+- Zoom in/out and fit-to-screen.
+- Pan the workspace.
+- Reset zoom.
+- Select all annotations where appropriate.
+- Clear annotations without removing the background image.
+- Replace or remove the background image.
+
+Use a history system that records meaningful document changes without storing an excessive number of huge image copies. Prefer object-state snapshots or command-based history as appropriate.
+
+Prevent history corruption during pointer movement and continuous drawing.
+
+Suggested shortcuts:
+
+- Ctrl/Cmd+Z: undo.
+- Ctrl/Cmd+Shift+Z: redo.
+- Delete/Backspace: delete selected object.
+- Ctrl/Cmd+A: select annotations where appropriate.
+- Ctrl/Cmd+S: download or save a project file, with clear behavior.
+- Escape: cancel the current operation or selection.
+
+Do not override normal browser shortcuts unnecessarily.
+
+8. Export
+
+Implement:
+
+- PNG export.
+- JPEG export with configurable quality.
+- Output scale options.
+- Preserve aspect ratio.
+- Optional background fill for transparent images.
+- Copy image to clipboard when the browser supports it.
+- Clear filename and download feedback.
+
+Exports must flatten the background image and annotations in the correct stacking order.
+
+Avoid exporting selection borders, resize handles, editor controls, checkerboard backgrounds, or other interface elements.
+
+Ensure image dimensions and text rendering are correct at different export scales. Handle canvas tainting and unsupported export cases gracefully.
+
+9. Project Persistence
+
+For the MVP:
+
+- Keep the active project in memory.
+- Offer an optional downloadable project file containing the image and annotation data.
+- Allow users to reopen a supported project file.
+- Validate imported project structure and version.
+- Avoid storing images persistently without the user's consent.
+
+Do not require a database or account.
+
+If browser autosave is added, make it optional, provide a clear reset option, and explain that local browser storage is not encrypted storage.
+
+10. Architecture
+
+Separate the application into:
+
+- Application shell.
+- Editor state and history.
+- Canvas rendering.
+- Annotation tool implementations.
+- Object properties.
+- Image import and validation.
+- Export and flattening.
+- Keyboard shortcut handling.
+- Project serialization.
+- Shared types and validation.
+
+Keep canvas-library-specific code isolated behind a small adapter or clearly defined boundary where practical.
+
+Do not put the entire editor in one enormous React component.
+
+11. Performance and Accessibility
+
+- Keep pointer movement smooth.
+- Avoid unnecessary React rerenders during drawing.
+- Clean up event listeners and object URLs.
+- Use appropriate canvas scaling and device pixel ratio handling.
+- Avoid blocking the main thread for heavy image operations.
+- Add keyboard-operable controls and visible focus indicators.
+- Provide accessible labels and tooltips.
+- Respect reduced-motion preferences.
+- Support narrow screens with collapsible panels or a compact toolbar.
+
+12. Testing
+
+Test:
+
+- Image import and invalid files.
+- Paste and drag-and-drop behavior where supported.
+- Shape creation and selection.
+- Object movement and resizing.
+- Undo and redo.
+- Delete and duplicate.
+- Export dimensions and file formats.
+- Transparent background export.
+- Permanent redaction in the flattened output.
+- Project save and reopen.
+- Keyboard shortcuts.
+- Responsive layout and accessibility basics.
+
+Add tests for pure geometry, serialization, and export utilities where possible.
+
+13. Engineering and Delivery Requirements
+
+- Inspect the existing repository before making changes.
+- Preserve existing working functionality.
+- Use strict TypeScript.
+- Avoid unsafe casts and unnecessary dependencies.
+- Do not use paid APIs or upload user screenshots.
+- Do not leave placeholder buttons for core features.
+- Run linting, type checking, tests, and production build.
+- Fix failures caused by the implementation.
+- Provide README setup instructions, architecture notes, supported formats, and known limitations.
+
+14. Definition of Done
+
+A user can open the app, paste or upload a screenshot, draw and style annotations, hide sensitive regions, undo and redo changes, export a flattened image, and reopen a saved project file without creating an account or uploading the screenshot to a server.
+
+Start with repository inspection and a concise implementation plan, then build and verify the complete working application.
